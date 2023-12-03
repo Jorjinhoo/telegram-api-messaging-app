@@ -1,10 +1,9 @@
-
-//your auth data
+//your config
 const config = {
-  api_id: 'xxx34',
-  api_hash: 'xxx6db5bb',
+  api_id: 'xxx73434',
+  api_hash: 'xxxbe8416277396db5bb',
   phone: 'xxx0455',
-  code: '7xxx85',
+  code: 'xxx85',
   password: ''
 
 }
