@@ -7,7 +7,7 @@ app.on('ready', () => {
     width: 900,
     height: 600,
     webPreferences: {
-      preload:[path.join(__dirname, 'src/backend/core.js')],
+      preload: path.join(__dirname, 'src/backend/preload.js'),
       nodeIntegration: true
     }
   })

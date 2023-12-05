@@ -25,28 +25,14 @@
   <section class="section" id="content-wrapper">
     <div class="content-block" id="first-content-block">
       <div class="container" id="refresh-bttn-container">
-        <div class="button" id="refresh-button">
+        <div class="button" id="refresh-button" onclick="loadAccFolders(true)">
           <span class="material-symbols-outlined" id="refresh-icon">directory_sync</span>
           REFRESH
         </div>
       </div>
       <div class="container" id="fold-list-container">
         <ul class="list" id="folders-list">
-          <li class="fl-item"> 
-            <span class="material-symbols-outlined">
-              folder
-            </span>
-            First</li>
-          <li class="fl-item"> 
-            <span class="material-symbols-outlined">
-              folder
-            </span>
-            First</li>
-          <li class="fl-item"> 
-            <span class="material-symbols-outlined">
-              folder
-            </span>
-            First</li>
+          <!-- folders list -->
         </ul>
       </div>
     </div>
@@ -55,7 +41,7 @@
         <textarea class="input" id="message-text-input" type="text" placeholder="INPUT MESSAGE" required></textarea>
       </div>
       <div class="container" id="start-bttn-container">
-        <div class="button" id="start-button">START</div>
+        <div class="button" id="start-button" onclick="startSendMessages()">START</div>
       </div>
     </div>
   </section>
