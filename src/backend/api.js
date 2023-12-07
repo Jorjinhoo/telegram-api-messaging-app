@@ -15,7 +15,7 @@ class API {
       api_hash,
 
       storageOptions: {
-        path: path.resolve(__dirname, `./authData/authData${mob_num}.json`),
+        path: path.resolve(__dirname, `./authData/salt/authSalt${mob_num}.json`),
       },
     });
   }
@@ -65,7 +65,7 @@ class API {
 const setApiConfigData = async (mobNum) => {
   mob_num = mobNum;
 
-  const filePath = path.resolve(__dirname, 'authData', `config${mobNum}.json`);
+  const filePath = path.resolve(__dirname, 'authData/configs', `config${mobNum}.json`);
 
   try {
     const data = await fs.promises.readFile(filePath, 'utf8');

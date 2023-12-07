@@ -1,8 +1,10 @@
 
-const addItem = (id, textContent, fatherElementId) => {
+const addItem = (id, textContent, fatherElementId, onClick = false, funcArg = false) => {
   let div = window.document.createElement('div');
   div.id = id;
   div.textContent = textContent;
+  if(onClick && funcArg){ div.onclick = () => onClick(funcArg) }
+  else if(onClick){ div.onclick = () => onClick() }
 
   window.document.querySelector(`#${fatherElementId}`).appendChild(div);
 }

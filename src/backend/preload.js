@@ -18,7 +18,7 @@ contextBridge.exposeInMainWorld('electron', {
 
       try {
         const jsonString = JSON.stringify(config, null, 2);
-        const filePath = path.resolve(__dirname, 'authData', `config${apiTel}.json`);
+        const filePath = path.resolve(__dirname, 'authData/configs', `config${apiTel}.json`);
 
         await fs.writeFile(filePath, jsonString, (err) =>
           err ? console.error(`Ошибка при записи файла: ${err}`) : console.log(`Файл ${filePath} успешно создан и записан.`)
@@ -30,6 +30,9 @@ contextBridge.exposeInMainWorld('electron', {
       } catch (e) {
         console.error('Произошла ошибка при записи в файл:', e);
       }
+    },
+    setApiConfig: async (apiTel) => {
+      await setApiConfigData(apiTel);
     },
     getAccFolders: async () => {
         const api = new API();
@@ -73,5 +76,29 @@ contextBridge.exposeInMainWorld('electron', {
         console.log(e);
         return false;
       }
+    },
+    getAllLoginAcc: () => {
+      const folderPath = path.resolve(__dirname, 'authData/configs');
+
+      const apiTelValues = [];
+
+      fs.readdirSync(folderPath).forEach(file => {
+        
+        const filePath = path.resolve(folderPath, file);
+    
+        const fileContent = fs.readFileSync(filePath, 'utf-8');
+        
+        try {
+            const jsonData = JSON.parse(fileContent);
+    
+            if (jsonData.apiTel && jsonData.apiTel.apiTel) {
+                apiTelValues.push(jsonData.apiTel.apiTel);
+            }
+        } catch (error) {
+            console.error(`Ошибка при чтении файла ${file}: ${error.message}`);
+        }
+      });
+
+      return apiTelValues;
     }
 });

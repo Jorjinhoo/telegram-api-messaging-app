@@ -17,14 +17,11 @@ const loadAccFolders = async (isRefBttn) => {
     });
 }
 
-// loadAccFolders(false);
 
 const addUserName = async () => {
   const userName = await window.electron.addUserName();
   userName ? addItem('tg-acc-name', userName, 'nav') : addMessageBanner('Ошибка при загрузке ника аккаунта!!!', 'red');;
 }
-
-// addUserName();
 
 
 const selectItem = (itemType, itemId) => {
@@ -75,3 +72,22 @@ const selectItem = (itemType, itemId) => {
     }
     //obawit banner kak w start messages
   }
+
+  const selectAcc = async (accTel) => {
+    await window.electron.setApiConfig(accTel);
+    await addUserName();
+    await loadAccFolders(false);
+    console.log('selected'+ accTel);
+  }
+
+
+  const loadAccounts = () => {
+    let accounts = window.electron.getAllLoginAcc();
+    accounts.forEach(account => {
+      addItem(account, account, 'tg-acc-list', selectAcc, account);
+    })
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    loadAccounts();
+  });
