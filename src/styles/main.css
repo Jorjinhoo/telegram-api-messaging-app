@@ -27,7 +27,7 @@ body {
 }
 
 #login-button {
-    margin: 20px 0 0 30px;
+    margin: 0 0 0 30px;
     width: 110px;
     height: 25px;
     font-weight: 900;
@@ -49,6 +49,12 @@ body {
 #login-button:hover #exit-icon {
     color: #000000;
 }
+
+#acc-icon {
+    margin-left: 10px;
+    font-size: 25px;
+}
+
 
 /* general */
 #content-wrapper {
@@ -129,7 +135,7 @@ body {
 }
 
 .fl-item.active {
-    background-color: #ccc; /* Цвет фона для активных элементов */
+    background-color: #61adff; /* Цвет фона для активных элементов */
 }
 
 
@@ -137,6 +143,7 @@ body {
 #message-text-input {
     height: 320px;
     width: 350px;
+    padding: 10px;
     background-color: #06193d40;
     color: #FFFFFF;
     border: 2px solid rgba(255, 255, 255, 0.482);
@@ -167,4 +174,106 @@ body {
 #start-button:hover {
     transform: scale(1.15);
     font-size: 27px;
+}
+
+/* message banner */
+.message-banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translate(-50%, -5%);
+    padding: 15px;
+    background-color: green;
+    transition: opacity 1.2s;
+    border-radius: 10px;
+    opacity: 0;
+}
+
+.message-active-green {
+    opacity: 1;
+}
+.message-active-red {
+    background-color: red;
+    opacity: 1;
+}
+.message-hide {
+    opacity: 0;
+}
+
+/* modal window */
+.modal {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: #0000008f;
+    top: 0;
+    left: 0;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: all .6s ease 0s;
+}
+
+.modal.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal.close {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.modal-body {
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 10px;
+    background: transparent;
+}
+
+.modal-content {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #3e90e8;
+    width: 400px;
+    height: 300px;
+    border-radius: 10px;
+}
+
+.modal-close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+}
+
+.form-input {
+    width: 280px;
+    padding: 8px;
+    outline: none;
+    border: none;
+    border-radius: 2px;
+    margin-top: 15px;
+}
+
+#submit-log-form-bttn {
+    margin-top: 15px;
+    color: #000000;
 }

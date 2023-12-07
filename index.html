@@ -12,15 +12,20 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <script src="src/frontend/ui.js"></script>
     <script src="src/frontend/handler.js"></script>
 </head>
-<body>
-  <div class="nav">
-    <div class="button" id="login-button">
+<body class="app">
+  <div class="nav" id="nav">
+    <div class="button" id="login-button" onclick="openModal()">
       <span class="material-symbols-outlined" id="exit-icon">exit_to_app</span>
       LOGIN
     </div>
+    <span class="material-symbols-outlined" id="acc-icon">
+      account_circle
+    </span>
+      <!-- tg acc name -->
   </div>
   <section class="section" id="content-wrapper">
     <div class="content-block" id="first-content-block">
@@ -45,6 +50,20 @@
       </div>
     </div>
   </section>
+  <div class="modal" id="login-modal" onclick="closeModal()">
+    <div class="modal-body">
+      <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-close" onclick="closeModal()">X</div>
+        <div class="form">
+          <input type="number" class="form-input" id="input-api-id" placeholder="api id" required/>
+          <input type="text" class="form-input" id="input-api-hash" placeholder="api hash" required/>
+          <input type="number" class="form-input" id="input-api-tel" placeholder="mobile number (48...)" required/>
+          <input type="number" class="form-input" id="input-api-code" placeholder="login code" required/>
+          <div class="button" id="submit-log-form-bttn" onclick="doLogin()">Submit</div>
+        </div>
+      </div>
+    </div>
+  </div>
   
   <script>
   </script>

@@ -1,7 +1,11 @@
 const path = require('path');
+const fs = require('fs');
 const MTProto = require('@mtproto/core');
 const { sleep } = require('@mtproto/core/src/utils/common');
-const {api_id, api_hash} = require('./authData/config');
+
+let api_id;
+let api_hash;
+let mob_num;
 
 
 class API {
@@ -11,7 +15,7 @@ class API {
       api_hash,
 
       storageOptions: {
-        path: path.resolve(__dirname, './authData/1.json'),
+        path: path.resolve(__dirname, `./authData/authData${mob_num}.json`),
       },
     });
   }
@@ -56,6 +60,22 @@ class API {
   }
 }
 
-const api = new API();
+// const api = new API();
 
-module.exports = api;
+const setApiConfigData = async (mobNum) => {
+  mob_num = mobNum;
+
+  const filePath = path.resolve(__dirname, 'authData', `config${mobNum}.json`);
+
+  try {
+    const data = await fs.promises.readFile(filePath, 'utf8');
+    const jsonData = JSON.parse(data);
+
+    api_id = jsonData.apiTel.apiId;
+    api_hash = jsonData.apiTel.apiHash;
+  } catch (err) {
+    console.error('Ошибка при чтении файла:', err);
+  }
+}
+
+module.exports = { API, setApiConfigData };
