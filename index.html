@@ -18,17 +18,24 @@
 </head>
 <body class="app">
   <div class="nav" id="nav">
-    <div class="button" id="login-button" onclick="openModal()">
+    <div class="button" id="login-button" onclick="addActiveClass('login-modal', 'open')">
       <span class="material-symbols-outlined" id="exit-icon">exit_to_app</span>
       LOGIN
     </div>
-    <span class="material-symbols-outlined" id="acc-icon">
-      account_circle
-    </span>
-    <div id="tg-acc-list">
-      <!-- tg acc list -->
+    <div id="drop-down-container">
+      <div class="button open" id="drop-down-button" onclick="toggleList('tg-acc-list', 'open')">
+        <span class="material-symbols-outlined" id="acc-icon">
+          account_circle
+        </span>
+        SELECT ACC <!-- drop down button -->
+      </div>
+      <div id="tg-acc-list">
+        <!-- tg acc list item -->
+        <!-- <div class="tg-acc-list-item">483243282222</div>
+        <div class="tg-acc-list-item">483243282222</div>
+        <div class="tg-acc-list-item">483243282222</div> -->
+      </div>
     </div>
-      <!-- tg acc name -->
   </div>
   <section class="section" id="content-wrapper">
     <div class="content-block" id="first-content-block">
@@ -53,15 +60,22 @@
       </div>
     </div>
   </section>
-  <div class="modal" id="login-modal" onclick="closeModal()">
+  <div class="modal" id="login-modal" onclick="removeActiveClass('login-modal', 'open')">
     <div class="modal-body">
       <div class="modal-content" onclick="event.stopPropagation()">
-        <div class="modal-close" onclick="closeModal()">X</div>
+        <div class="modal-close" onclick="removeActiveClass('login-modal', 'open')">X</div>
         <div class="form">
-          <input type="number" class="form-input" id="input-api-id" placeholder="api id" required/>
-          <input type="text" class="form-input" id="input-api-hash" placeholder="api hash" required/>
-          <input type="number" class="form-input" id="input-api-tel" placeholder="mobile number (48...)" required/>
-          <input type="number" class="form-input" id="input-api-code" placeholder="login code" required/>
+          <input type="number" class="form-input" id="input-api-id" placeholder="API ID" required/>
+          <input type="text" class="form-input" id="input-api-hash" placeholder="API HASH" required/>
+          <input type="number" class="form-input" id="input-api-tel" placeholder="MOBILE NUMBER (48...)" required/>
+          <div id="login-form-helper-text">
+            <a>*</a>
+            <p>
+              First, fill out all the fields above and click submit. 
+              Next, enter the received code and submit the fully completed form again.
+            </p>
+          </div>
+          <input type="number" class="form-input" id="input-api-code" placeholder="LOGIN CODE" required/>
           <div class="button" id="submit-log-form-bttn" onclick="doLogin()">Submit</div>
         </div>
       </div>

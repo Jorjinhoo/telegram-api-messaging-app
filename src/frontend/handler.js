@@ -18,9 +18,9 @@ const loadAccFolders = async (isRefBttn) => {
 }
 
 
-const addUserName = async () => {
+const updateDropDownBttn = async () => {
   const userName = await window.electron.addUserName();
-  userName ? addItem('tg-acc-name', userName, 'nav') : addMessageBanner('Ошибка при загрузке ника аккаунта!!!', 'red');;
+  userName ? document.getElementById("drop-down-button").innerHTML = userName : addMessageBanner('Ошибка при загрузке ника аккаунта!!!', 'red');;
 }
 
 
@@ -75,16 +75,28 @@ const selectItem = (itemType, itemId) => {
 
   const selectAcc = async (accTel) => {
     await window.electron.setApiConfig(accTel);
-    await addUserName();
+    await updateDropDownBttn();
     await loadAccFolders(false);
-    console.log('selected'+ accTel);
+    toggleList('tg-acc-list', 'open');
+  }
+
+  const removeAccount = async (accountTel) => {
+    window.electron.removeAccount(accountTel, 'authData/configs', 'config');
+    window.electron.removeAccount(accountTel, 'authData/salt', 'authSalt' );
+    await window.electron.setApiConfig(accountTel);
+    loadAccounts();
+    await updateDropDownBttn();
+    await loadAccFolders(false);
+    //перезагрузить се
   }
 
 
   const loadAccounts = () => {
     let accounts = window.electron.getAllLoginAcc();
+
     accounts.forEach(account => {
-      addItem(account, account, 'tg-acc-list', selectAcc, account);
+      addItem(account, account, 'tg-acc-list', selectAcc, account, "tg-acc-list-item");
+      addItem(account, 'REMOVE', 'tg-acc-list', removeAccount, account, 'remove-acc-button');
     })
   }
 

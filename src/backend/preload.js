@@ -100,5 +100,26 @@ contextBridge.exposeInMainWorld('electron', {
       });
 
       return apiTelValues;
+    },
+    removeAccount: (accountTel, folder, filePrefix) => {
+      const folderPath = path.resolve(__dirname, folder);
+
+      fs.readdirSync(folderPath).forEach(file => {
+        
+        const filePath = path.resolve(folderPath, file);
+        const removedFilePath = path.resolve(folderPath, `${filePrefix}${accountTel}.json`)
+        console.log(filePath);
+        console.log(removedFilePath);
+        if(filePath == removedFilePath){
+          fs.unlink(filePath, (e) => {
+            if (e) {
+                console.error(`Error deleting file ${filePath}:`, e);
+                addMessageBanner(e, 'red');
+            } else {
+                console.log(`File ${filePath} has been deleted.`);
+            }
+        });
+        }
+      });
     }
 });

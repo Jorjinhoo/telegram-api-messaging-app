@@ -50,9 +50,97 @@ body {
     color: #000000;
 }
 
+
+#drop-down-container {
+    position: relative;
+    width: 135px;
+    margin-left: 15px;
+}
+
 #acc-icon {
-    margin-left: 10px;
-    font-size: 25px;
+    font-size: 18px;
+}
+
+#drop-down-button {
+    position: relative;
+    display: block;
+    width: 100%;
+    text-align: left;
+    background-color: #00C8FF;
+    border-radius: 6px;
+    padding: 8px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+#drop-down-button:hover {
+    background-color: #00C8FF;
+    font-size: 23px;
+    transform: scale(1.1);
+}
+
+#drop-down-button::after {
+    content: ">";
+    font-size: 18px; 
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%) rotate(90deg);
+    pointer-events: none;
+}
+
+#tg-acc-list {
+    position: absolute;
+    left: 0;
+    top: 44px;
+    overflow: hidden;
+    border-radius: 6px;
+    width: 150px;
+    background-color: #00C8FF;
+    cursor: pointer;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: all .6s ease 0s;
+}
+
+#tg-acc-list.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.tg-acc-list-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: transparent;
+}
+
+.tg-acc-list-item:hover {
+    background-color: #82e4ff;
+}
+
+.tg-acc-list-item:hover ~ .remove-acc-button {
+    background-color: red;
+    color: white;
+}
+
+.remove-acc-button {
+    padding: 2px;
+    display: flex;
+    height: 16px;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    color: black;
+}
+
+.remove-acc-button:hover {
+    font-size: 18px;
+    background-color: rgb(213, 42, 42);
+    color: white;
 }
 
 
@@ -208,7 +296,7 @@ body {
     position: fixed;
     width: 100%;
     height: 100%;
-    background-color: #0000008f;
+    background-color: #000000ad;
     top: 0;
     left: 0;
 
@@ -242,9 +330,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #3e90e8;
+    background-color: #004fd9;
     width: 400px;
-    height: 300px;
+    height: 340px;
     border-radius: 10px;
 }
 
@@ -271,9 +359,44 @@ body {
     border: none;
     border-radius: 2px;
     margin-top: 15px;
+    cursor: pointer;
+}
+
+.form-input::placeholder {
+    color: rgba(255, 255, 255, 0.716);
+}
+
+.form-input:focus {
+    background-color: #1d81ec;
+}
+
+#login-form-helper-text {
+    width: 280px;
+    padding: 8px;
+    display: flex;
+    margin-top: 5px;
+    background-color: #004fd9;
+}
+
+#login-form-helper-text a{
+    font-size: 20px;
+    margin-right: 2px;
+    color: rgb(255, 35, 35);
+    background-color: transparent;
+}
+
+#login-form-helper-text p{
+    background-color: transparent;
 }
 
 #submit-log-form-bttn {
+    width: 100px;
+    height: 20px;
     margin-top: 15px;
     color: #000000;
+}
+
+#submit-log-form-bttn:hover {
+    transform: scale(1.15);
+    font-size: 28px;
 }
