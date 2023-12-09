@@ -1,29 +1,46 @@
 let selectedFolders = [];
 let allAccFolders = [];
 
-const loadAccFolders = async (isRefBttn) => {
-
+//load folders
+const loadAccFolders = async () => {
+  try{
     let folderList = document.getElementById('folders-list');
-    if(isRefBttn && folderList){
+    if(folderList){
         while (folderList.firstChild) {
             folderList.removeChild(folderList.firstChild);
         }
     }
-
-    let accFolders = await window.electron.getAccFolders();
-    allAccFolders = accFolders;
-    accFolders.forEach(element => {
-        addListItem(element.title, element.title, 'folders-list', 'folder');
-    });
+  
+      let accFolders = await window.electron.getAccFolders();
+      allAccFolders = accFolders;
+      accFolders.forEach(element => {
+          addListItem(element.title, element.title, 'folders-list', 'folder');
+      });
+  }catch(e){
+    if(e.error_message == 'CONNECTION_API_ID_INVALID'){
+      addItem('absent-folders', 'SELECT ACC', 'folders-list', 'li');
+      addMessageBanner('Account selection is required!!!', 'red');
+    }else if(e.error_message == 'AUTH_KEY_UNREGISTERED'){
+      addItem('absent-folders', 'FOLDERS NOT FOUND', 'folders-list', 'li');
+      addMessageBanner('Не выполнен вход в аккаунт!!! Удалите аккаунт и заново выполните вход', 'red')
+    }else{
+      addItem('absent-folders', 'FOLDERS NOT FOUND', 'folders-list', 'li');
+    }
+  }
 }
 
-
-const updateDropDownBttn = async () => {
-  const userName = await window.electron.addUserName();
-  userName ? document.getElementById("drop-down-button").innerHTML = userName : addMessageBanner('Ошибка при загрузке ника аккаунта!!!', 'red');;
+//update dropDown button
+const updateDropDownBttn = async (accTel) => {
+    const userName = await window.electron.addUserName();
+    if(userName){
+      document.getElementById("drop-down-button").innerHTML = userName
+    }else{
+      addMessageBanner(`Ошибка при загрузке ника аккаунта: ${accTel}`, 'red');
+      document.getElementById("drop-down-button").innerHTML = accTel;
+    }
 }
 
-
+//select folder
 const selectItem = (itemType, itemId) => {
     let selectedItem = document.getElementById(itemId);
   
@@ -45,6 +62,8 @@ const selectItem = (itemType, itemId) => {
     }
   }
 
+
+  //send messages
   const startSendMessages = async () => {
     let messageText = document.getElementById('message-text-input').value;
 
@@ -62,37 +81,65 @@ const selectItem = (itemType, itemId) => {
     }
   }
 
+  //login
   const doLogin = async () => {
     let apiId = document.getElementById('input-api-id').value.toString();
     let apiHash = document.getElementById('input-api-hash').value;
     let apiTel = document.getElementById('input-api-tel').value.toString();
     let code = document.getElementById('input-api-code').value.toString();
-    if(apiId && apiHash && apiTel){
-      await window.electron.userAuth(apiId, apiHash, apiTel, code ? code : '');
+
+    try{
+      if(apiId && apiHash && apiTel){
+        const isAuth = await window.electron.userAuth(apiId, apiHash, apiTel, code ? code : '');
+
+        if(code)location.reload();
+
+        if(isAuth)addMessageBanner(`Account: ${apiTel} has been added`, 'green');
+  
+      } else if(!apiId){
+        console.error('Enter api Id!!!');
+        addMessageBanner('Enter api Id!!!', 'red');
+      } else if(!apiHash){
+        console.error('Enter api Hash!!!');
+        addMessageBanner('Enter api Hash!!!', 'red');
+      } else if(!apiTel){
+        console.error('Enter mobile number!!!');
+        addMessageBanner('Enter mobile number!!!', 'red');
+      }
+    }catch(e){
+      if(e.error_message == 'PHONE_CODE_INVALID'){
+        addMessageBanner('Enter the code and submit the form again');
+      }else{
+        addMessageBanner(`An error occurred during authorization: ${e}`);
+      }
     }
-    //obawit banner kak w start messages
   }
 
+  //select account
   const selectAcc = async (accTel) => {
     await window.electron.setApiConfig(accTel);
-    await updateDropDownBttn();
-    await loadAccFolders(false);
+    await updateDropDownBttn(accTel);
+    await loadAccFolders();
     toggleList('tg-acc-list', 'open');
   }
 
+  //remove account
   const removeAccount = async (accountTel) => {
     window.electron.removeAccount(accountTel, 'authData/configs', 'config');
     window.electron.removeAccount(accountTel, 'authData/salt', 'authSalt' );
-    await window.electron.setApiConfig(accountTel);
-    loadAccounts();
-    await updateDropDownBttn();
-    await loadAccFolders(false);
-    //перезагрузить се
+    location.reload();
   }
 
-
+  //load accounts
   const loadAccounts = () => {
     let accounts = window.electron.getAllLoginAcc();
+    let tgAccList = document.getElementById('tg-acc-list');
+
+    if(accounts.length >= 1){
+      while (tgAccList.firstChild) {
+        tgAccList.removeChild(tgAccList.firstChild);
+      }
+    }
 
     accounts.forEach(account => {
       addItem(account, account, 'tg-acc-list', selectAcc, account, "tg-acc-list-item");

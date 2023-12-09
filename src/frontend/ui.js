@@ -1,6 +1,7 @@
 
-const addItem = (id, textContent, fatherElementId, onClick = false, funcArg = false, className = false) => {
-  let div = window.document.createElement('div');
+const addItem = (id, textContent, fatherElementId, onClick = false, funcArg = false, className = false, tag = 'div') => {
+
+  let div = window.document.createElement(tag);
   div.id = id;
   div.textContent = textContent;
   if(onClick && funcArg){ div.onclick = () => onClick(funcArg) }

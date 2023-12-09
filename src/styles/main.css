@@ -122,25 +122,26 @@ body {
     background-color: #82e4ff;
 }
 
-.tg-acc-list-item:hover ~ .remove-acc-button {
-    background-color: red;
-    color: white;
-}
 
-.remove-acc-button {
-    padding: 2px;
-    display: flex;
-    height: 16px;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    color: black;
-}
+.remove-acc-button { 
+    padding: 2px; 
+    display: flex; 
+    height: 16px; 
+    justify-content: center; 
+    align-items: center; 
+    background-color: white; 
+    color: black; 
+} 
 
-.remove-acc-button:hover {
-    font-size: 18px;
-    background-color: rgb(213, 42, 42);
-    color: white;
+.tg-acc-list-item:hover ~ .remove-acc-button { 
+    background-color: red; 
+    color: white; 
+} 
+ 
+.remove-acc-button:hover { 
+    font-size: 18px; 
+    background-color: rgb(213, 42, 42); 
+    color: white; 
 }
 
 

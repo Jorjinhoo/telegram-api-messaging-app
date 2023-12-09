@@ -16,7 +16,6 @@ contextBridge.exposeInMainWorld('electron', {
         }
       };
 
-      try {
         const jsonString = JSON.stringify(config, null, 2);
         const filePath = path.resolve(__dirname, 'authData/configs', `config${apiTel}.json`);
 
@@ -25,11 +24,9 @@ contextBridge.exposeInMainWorld('electron', {
         );
 
         await setApiConfigData(apiTel);
-        await auth(apiTel, code);
+        const isAuth = await auth(apiTel, code);
 
-      } catch (e) {
-        console.error('Произошла ошибка при записи в файл:', e);
-      }
+        return isAuth ? true : isAuth;
     },
     setApiConfig: async (apiTel) => {
       await setApiConfigData(apiTel);
@@ -96,6 +93,7 @@ contextBridge.exposeInMainWorld('electron', {
             }
         } catch (error) {
             console.error(`Ошибка при чтении файла ${file}: ${error.message}`);
+            addMessageBanner(`Ошибка при чтении файла конфига ${file}: ${error.message}`, 'red')
         }
       });
 
@@ -116,6 +114,7 @@ contextBridge.exposeInMainWorld('electron', {
                 console.error(`Error deleting file ${filePath}:`, e);
                 addMessageBanner(e, 'red');
             } else {
+                addMessageBanner(`Account ${accountTel} has been deleted`, 'green');
                 console.log(`File ${filePath} has been deleted.`);
             }
         });

@@ -20,16 +20,17 @@
   <div class="nav" id="nav">
     <div class="button" id="login-button" onclick="addActiveClass('login-modal', 'open')">
       <span class="material-symbols-outlined" id="exit-icon">exit_to_app</span>
-      LOGIN
+      ADD ACC
     </div>
     <div id="drop-down-container">
-      <div class="button open" id="drop-down-button" onclick="toggleList('tg-acc-list', 'open')">
+      <div class="button" id="drop-down-button" onclick="toggleList('tg-acc-list', 'open')">
         <span class="material-symbols-outlined" id="acc-icon">
           account_circle
         </span>
         SELECT ACC <!-- drop down button -->
       </div>
       <div id="tg-acc-list">
+        <div class="tg-acc-list-item">THERE ARE NO ACCOUNTS</div>
         <!-- tg acc list item -->
         <!-- <div class="tg-acc-list-item">483243282222</div>
         <div class="tg-acc-list-item">483243282222</div>
@@ -40,13 +41,14 @@
   <section class="section" id="content-wrapper">
     <div class="content-block" id="first-content-block">
       <div class="container" id="refresh-bttn-container">
-        <div class="button" id="refresh-button" onclick="loadAccFolders(true)">
+        <div class="button" id="refresh-button" onclick="loadAccFolders()">
           <span class="material-symbols-outlined" id="refresh-icon">directory_sync</span>
           REFRESH
         </div>
       </div>
       <div class="container" id="fold-list-container">
         <ul class="list" id="folders-list">
+          <li class="folder">FOLDERS NOT FOUND</li>
           <!-- folders list -->
         </ul>
       </div>

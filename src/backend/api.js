@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const MTProto = require('@mtproto/core');
 const { sleep } = require('@mtproto/core/src/utils/common');
+const { message } = require('telegram/client');
 
 let api_id;
 let api_hash;
@@ -60,8 +61,6 @@ class API {
   }
 }
 
-// const api = new API();
-
 const setApiConfigData = async (mobNum) => {
   mob_num = mobNum;
 
@@ -74,7 +73,8 @@ const setApiConfigData = async (mobNum) => {
     api_id = jsonData.apiTel.apiId;
     api_hash = jsonData.apiTel.apiHash;
   } catch (err) {
-    console.error('Ошибка при чтении файла:', err);
+    console.error('Ошибка при чтении файла в setApiConfigData:', err);
+    addMessageBanner(`Ошибка установки кофига: ${err}`, 'red');
   }
 }
 

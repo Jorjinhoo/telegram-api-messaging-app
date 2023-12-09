@@ -1,4 +1,3 @@
-// const {code, phone, password} = require('./authData/config');
 const { API } = require('./api')
 
 async function getUser(api) {
@@ -32,14 +31,6 @@ function signIn({ code, phone, phone_code_hash }, api) {
     phone_code_hash: phone_code_hash,
   });
 }
-function signUp({ phone, phone_code_hash }, api) {
-  return api.call('auth.signUp', {
-    phone_number: phone,
-    phone_code_hash: phone_code_hash,
-    first_name: 'MTProto',
-    last_name: 'Core',
-  });
-}
 
 function getPassword(api) {
   return api.call('account.getPassword');
@@ -64,7 +55,6 @@ const auth = async (phone, code) => {
   if (!user) {
     const { phone_code_hash } = await sendCode(phone, api);
 
-    try {
       const signInResult = await signIn({
         code,
         phone,
@@ -72,16 +62,7 @@ const auth = async (phone, code) => {
       }, api);
 
       if (signInResult._ === 'auth.authorizationSignUpRequired') {
-        await signUp({
-          phone,
-          phone_code_hash,
-        }, api);
-      }
-    } catch (error) {
-      if (error.error_message !== 'SESSION_PASSWORD_NEEDED') {
-        console.log(`error:`, error);
-
-        return;
+       console.log(`account with this phone: ${phone} doesnt exist, registration required`);
       }
 
       // 2FA
@@ -98,7 +79,6 @@ const auth = async (phone, code) => {
       }, api);
 
       const checkPasswordResult = await checkPassword({ srp_id, A, M1 }, api);
-    }
   }
 };
 
