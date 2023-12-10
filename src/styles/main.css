@@ -89,6 +89,10 @@ body {
     pointer-events: none;
 }
 
+#drop-down-button.open::after {
+    transform: translateY(-50%) rotate(270deg);
+}
+
 #tg-acc-list {
     position: absolute;
     left: 0;
@@ -198,6 +202,18 @@ body {
     font-size: 25px;
 }
 
+.spin-animation {
+    animation: spin-refresh 1s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+}
+@keyframes spin-refresh {
+    from {
+      transform: rotate(50deg);
+    }
+    to {
+      transform: rotate(410deg);
+    }
+}
+
 #refresh-button:hover #refresh-icon {
     transform: rotate(50deg);
     font-size: 22px;
@@ -263,6 +279,10 @@ body {
 #start-button:hover {
     transform: scale(1.15);
     font-size: 27px;
+}
+
+#start-bttn-spinner.loader {
+    margin-left: 10px;
 }
 
 /* message banner */
@@ -401,3 +421,23 @@ body {
     transform: scale(1.15);
     font-size: 28px;
 }
+
+#submit-bttn-spinner.loader {
+    margin-left: 10px;
+}
+
+/* load spinner */
+.loader {
+    border: 3px solid transparent;
+    border-top: 4px solid black;
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    animation: spin .3s linear infinite;
+    background-color: transparent;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

@@ -2,7 +2,16 @@ let selectedFolders = [];
 let allAccFolders = [];
 
 //load folders
+let loadFoldersBttnPressed = false;
+
 const loadAccFolders = async () => {
+  if (loadFoldersBttnPressed) {return;}
+
+  loadFoldersBttnPressed = true;
+
+  let refreshIcon = document.getElementById('refresh-icon');
+  refreshIcon.classList.add('spin-animation');
+
   try{
     let folderList = document.getElementById('folders-list');
     if(folderList){
@@ -11,11 +20,17 @@ const loadAccFolders = async () => {
         }
     }
   
-      let accFolders = await window.electron.getAccFolders();
-      allAccFolders = accFolders;
-      accFolders.forEach(element => {
-          addListItem(element.title, element.title, 'folders-list', 'folder');
-      });
+    let accFolders = await window.electron.getAccFolders();
+    allAccFolders = accFolders;
+    accFolders.forEach(element => {
+        addListItem(element.title, element.title, 'folders-list', 'folder');
+    });
+    
+    setTimeout(function () {
+      refreshIcon.classList.toggle('spin-animation');
+      loadFoldersBttnPressed = false;
+    }, 1000);
+
   }catch(e){
     if(e.error_message == 'CONNECTION_API_ID_INVALID'){
       addItem('absent-folders', 'SELECT ACC', 'folders-list', 'li');
@@ -26,6 +41,11 @@ const loadAccFolders = async () => {
     }else{
       addItem('absent-folders', 'FOLDERS NOT FOUND', 'folders-list', 'li');
     }
+
+    setTimeout(function () {
+      refreshIcon.classList.toggle('spin-animation');
+      loadFoldersBttnPressed = false;
+    }, 1000);
   }
 }
 
@@ -64,7 +84,14 @@ const selectItem = (itemType, itemId) => {
 
 
   //send messages
+  let startButtonPressed = false;
+
   const startSendMessages = async () => {
+    if (startButtonPressed) {return;}
+
+    startButtonPressed = true;
+    addActiveClass('start-bttn-spinner', 'loader');
+
     let messageText = document.getElementById('message-text-input').value;
 
     if (allAccFolders.length > 0 && selectedFolders.length > 0 && messageText) {
@@ -79,10 +106,23 @@ const selectItem = (itemType, itemId) => {
       console.error('Нужно ввести текст сообщения!!!');
       addMessageBanner('Нужно ввести текст сообщения!!!', 'red');
     }
+
+    setTimeout(function () {
+      removeActiveClass('start-bttn-spinner', 'loader');
+      startButtonPressed = false;
+    }, 1000);
   }
 
+  
   //login
+  let loginButtonPressed = false;
+
   const doLogin = async () => {
+    if (loginButtonPressed) {return;}
+
+    loginButtonPressed = true;
+    addActiveClass('submit-bttn-spinner', 'loader');
+
     let apiId = document.getElementById('input-api-id').value.toString();
     let apiHash = document.getElementById('input-api-hash').value;
     let apiTel = document.getElementById('input-api-tel').value.toString();
@@ -106,12 +146,23 @@ const selectItem = (itemType, itemId) => {
         console.error('Enter mobile number!!!');
         addMessageBanner('Enter mobile number!!!', 'red');
       }
+
+      setTimeout(function () {
+        removeActiveClass('submit-bttn-spinner', 'loader');
+        loginButtonPressed = false;
+      }, 1000);
+
     }catch(e){
       if(e.error_message == 'PHONE_CODE_INVALID'){
         addMessageBanner('Enter the code and submit the form again');
       }else{
         addMessageBanner(`An error occurred during authorization: ${e}`);
       }
+
+      setTimeout(function () {
+        removeActiveClass('submit-bttn-spinner', 'loader');
+        loginButtonPressed = false;
+      }, 1000);
     }
   }
 

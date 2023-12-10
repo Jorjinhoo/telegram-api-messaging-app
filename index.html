@@ -23,7 +23,7 @@
       ADD ACC
     </div>
     <div id="drop-down-container">
-      <div class="button" id="drop-down-button" onclick="toggleList('tg-acc-list', 'open')">
+      <div class="button" id="drop-down-button" onclick="toggleList('tg-acc-list', 'drop-down-button', 'open')">
         <span class="material-symbols-outlined" id="acc-icon">
           account_circle
         </span>
@@ -58,7 +58,10 @@
         <textarea class="input" id="message-text-input" type="text" placeholder="INPUT MESSAGE" required></textarea>
       </div>
       <div class="container" id="start-bttn-container">
-        <div class="button" id="start-button" onclick="startSendMessages()">START</div>
+        <div class="button" id="start-button" onclick="startSendMessages()">
+          START
+          <div id="start-bttn-spinner"></div>
+        </div>
       </div>
     </div>
   </section>
@@ -78,7 +81,10 @@
             </p>
           </div>
           <input type="number" class="form-input" id="input-api-code" placeholder="LOGIN CODE" required/>
-          <div class="button" id="submit-log-form-bttn" onclick="doLogin()">Submit</div>
+          <div class="button" id="submit-log-form-bttn" onclick="doLogin()">
+            Submit
+            <div id="submit-bttn-spinner"></div>
+          </div>
         </div>
       </div>
     </div>

@@ -60,9 +60,11 @@ function removeActiveClass(elementId, removeClass) {
   document.getElementById(elementId).classList.remove(removeClass);;
 }
 
-function toggleList(elementId, activeClass) {
-  let tgAccList = document.getElementById(elementId);
-  let isAccSwitchListOpen = tgAccList.classList.contains("open");
+function toggleList(fElementId, sElementId, activeClass) {
+  let tgAccList = document.getElementById(fElementId);
 
-  isAccSwitchListOpen ? removeActiveClass(elementId, activeClass) : addActiveClass(elementId, activeClass);
+  let isAccSwitchListOpen = tgAccList.classList.contains(activeClass);
+
+  isAccSwitchListOpen ? removeActiveClass(fElementId, activeClass) : addActiveClass(fElementId, activeClass);
+  isAccSwitchListOpen ? removeActiveClass(sElementId, activeClass) : addActiveClass(sElementId, activeClass);
 }
