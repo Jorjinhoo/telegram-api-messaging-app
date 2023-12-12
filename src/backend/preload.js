@@ -3,7 +3,9 @@ const fs = require('fs');
 const { API, setApiConfigData } = require('./api');
 const auth = require('./auth');
 const path = require('path');
+const { start } = require('repl');
 
+let stopSandMessage = false;
 
 contextBridge.exposeInMainWorld('electron', {
     userAuth: async (apiId, apiHash, apiTel, code) => {
@@ -15,7 +17,7 @@ contextBridge.exposeInMainWorld('electron', {
           code: code
         }
       };
-
+      try {
         const jsonString = JSON.stringify(config, null, 2);
         const filePath = path.resolve(__dirname, 'authData/configs', `config${apiTel}.json`);
 
@@ -24,9 +26,12 @@ contextBridge.exposeInMainWorld('electron', {
         );
 
         await setApiConfigData(apiTel);
-        const isAuth = await auth(apiTel, code);
+        await auth(apiTel, code);
 
-        return isAuth ? true : isAuth;
+        return true;
+      } catch(e){
+        return e;
+      }
     },
     setApiConfig: async (apiTel) => {
       await setApiConfigData(apiTel);
@@ -36,28 +41,37 @@ contextBridge.exposeInMainWorld('electron', {
         let resolvedPeer = await api.call('messages.getDialogFilters', {});
         return resolvedPeer;
     },
-    sendMessages: async (allAccFolders, selectedFoldersList, messageText) => {
+    sendMessages: async (allAccFolders, selectedFoldersList, messageText, delay) => {
+      stopSandMessage = !stopSandMessage;
+
       const api = new API();
+
       const filteredFolders = allAccFolders.filter(folder => selectedFoldersList.includes(folder.title));
+      try{
         for (const folder of filteredFolders) {
-            for (const peer of folder.include_peers) {
-              if(peer._ == 'inputPeerChannel'){
-                try {
-                  await api.call('messages.sendMessage', {
-                    peer: {
-                      _: peer._,
-                      channel_id: peer.channel_id,
-                      access_hash: peer.access_hash
-                    },
-                    message: messageText,
-                    random_id: Math.ceil(Math.random() * 0xffffff) + Math.ceil(Math.random() * 0xffffff),
-                  });
-                } catch (e) {
-                  console.error('Ошибка при отправке сообщения:', e);
-                }
-              }
+          for (const peer of folder.include_peers){
+            if(peer._ == 'inputPeerChannel' && stopSandMessage) {
+                await api.call('messages.sendMessage', {
+                  peer: {
+                    _: peer._,
+                    channel_id: peer.channel_id,
+                    access_hash: peer.access_hash
+                  },
+                  message: messageText,
+                  random_id: Math.ceil(Math.random() * 0xffffff) + Math.ceil(Math.random() * 0xffffff),
+                });
+
+                await new Promise(resolve => setTimeout(resolve, delay)); //добаить чтобы клиент мог устаналиать таймер
+            }else if(!stopSandMessage){
+              return 'stop';
             }
+          }
         }
+        return 'good';
+      }catch (e) {
+        console.error('Ошибка при отправке сообщения:', e);
+        return e;
+      }
     },
     addUserName: async () => {
       const api = new API();

@@ -18,6 +18,7 @@
 </head>
 <body class="app">
   <div class="nav" id="nav">
+    <div class="button" onclick="location.reload()"></div>
     <div class="button" id="login-button" onclick="addActiveClass('login-modal', 'open')">
       <span class="material-symbols-outlined" id="exit-icon">exit_to_app</span>
       ADD ACC
@@ -56,6 +57,10 @@
     <div class="content-block" id="second-content-block">
       <div class="container" id="input-container">
         <textarea class="input" id="message-text-input" type="text" placeholder="INPUT MESSAGE" required></textarea>
+      </div>
+      <div class="container" id="delay-input-container">
+        <div id="input-delay-label">INPUT DELAY TIME IN SECONDS</div>
+        <input type="number" class="form-input" id="delay-input" value="5"/>
       </div>
       <div class="container" id="start-bttn-container">
         <div class="button" id="start-button" onclick="startSendMessages()">

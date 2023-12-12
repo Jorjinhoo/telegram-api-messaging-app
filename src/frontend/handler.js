@@ -7,6 +7,8 @@ let loadFoldersBttnPressed = false;
 const loadAccFolders = async () => {
   if (loadFoldersBttnPressed) {return;}
 
+  selectedFolders = [];
+
   loadFoldersBttnPressed = true;
 
   let refreshIcon = document.getElementById('refresh-icon');
@@ -87,15 +89,19 @@ const selectItem = (itemType, itemId) => {
   let startButtonPressed = false;
 
   const startSendMessages = async () => {
-    if (startButtonPressed) {return;}
 
-    startButtonPressed = true;
+    startButtonPressed = !startButtonPressed;
+
     addActiveClass('start-bttn-spinner', 'loader');
 
     let messageText = document.getElementById('message-text-input').value;
+    let delay = document.getElementById('delay-input').value;
 
-    if (allAccFolders.length > 0 && selectedFolders.length > 0 && messageText) {
-      await window.electron.sendMessages(allAccFolders, selectedFolders, messageText);
+    let result;
+
+    if (allAccFolders.length > 0 && selectedFolders.length > 0 && messageText && delay) {
+      delay = delay * 1000;
+      result = await window.electron.sendMessages(allAccFolders, selectedFolders, messageText, delay);
     } else if(allAccFolders.length < 1){
       console.error('На аккаунте не обнаружено папок!!!');
       addMessageBanner('На аккаунте не обнаружено папок!!!', 'red');
@@ -105,11 +111,21 @@ const selectItem = (itemType, itemId) => {
     } else if(!messageText){
       console.error('Нужно ввести текст сообщения!!!');
       addMessageBanner('Нужно ввести текст сообщения!!!', 'red');
+    } else if(!delay){
+      console.error('Нужно ввести задержку!!!');
+      addMessageBanner('Нужно ввести задержку для отпраки сообщений!!!', 'red');
     }
 
     setTimeout(function () {
       removeActiveClass('start-bttn-spinner', 'loader');
       startButtonPressed = false;
+      if(result == 'good'){
+        addMessageBanner('The messages have been successfully sent', 'green')
+      }else if (result == 'stop') {
+        addMessageBanner('The process of sending is stopped', 'green')
+      }else{
+        addMessageBanner(`An error occurred during authorization: ${result}`, 'red');
+      }
     }, 1000);
   }
 
@@ -168,10 +184,15 @@ const selectItem = (itemType, itemId) => {
 
   //select account
   const selectAcc = async (accTel) => {
-    await window.electron.setApiConfig(accTel);
-    await updateDropDownBttn(accTel);
-    await loadAccFolders();
-    toggleList('tg-acc-list', 'open');
+    try{
+      await window.electron.setApiConfig(accTel);
+      await updateDropDownBttn(accTel);
+      await loadAccFolders();
+      toggleList('tg-acc-list', 'drop-down-button', 'open');
+    }catch(e){
+      console.log(`Account select error: ${e}`);
+      addMessageBanner(`Account select error: ${e}`, 'red');      
+    }
   }
 
   //remove account

@@ -72,9 +72,8 @@ const setApiConfigData = async (mobNum) => {
 
     api_id = jsonData.apiTel.apiId;
     api_hash = jsonData.apiTel.apiHash;
-  } catch (err) {
-    console.error('Ошибка при чтении файла в setApiConfigData:', err);
-    addMessageBanner(`Ошибка установки кофига: ${err}`, 'red');
+  } catch (e) {
+    return e;
   }
 }
 

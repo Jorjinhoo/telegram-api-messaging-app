@@ -268,6 +268,28 @@ body {
     border: 2px solid white;
 }
 
+#delay-input-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+#input-delay-label {
+    margin-bottom: 4px;
+}
+
+#delay-input {
+    background-color: #0086ED;
+    width: 134px;
+    margin-top: 0px;
+    border: 2px solid #0086ED;
+    border-radius: 8px;
+}
+
+#delay-input:focus {
+    border-color: white;
+}
+
 #start-button {
     margin-top: 20px;
     width: 120px;

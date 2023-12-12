@@ -64,7 +64,7 @@ function toggleList(fElementId, sElementId, activeClass) {
   let tgAccList = document.getElementById(fElementId);
 
   let isAccSwitchListOpen = tgAccList.classList.contains(activeClass);
-
+  
   isAccSwitchListOpen ? removeActiveClass(fElementId, activeClass) : addActiveClass(fElementId, activeClass);
   isAccSwitchListOpen ? removeActiveClass(sElementId, activeClass) : addActiveClass(sElementId, activeClass);
 }
