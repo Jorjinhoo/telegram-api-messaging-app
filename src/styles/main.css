@@ -20,6 +20,7 @@ body {
 
 /* navigation */
 .nav {
+    margin-top: 5px;
     display: flex;
     align-items: center;
     height: 60px;
@@ -103,10 +104,17 @@ body {
     background-color: #00C8FF;
     cursor: pointer;
 
+    max-height: 130px;
+    overflow: scroll;
+
     opacity: 0;
     visibility: hidden;
 
     transition: all .6s ease 0s;
+}
+
+#tg-acc-list::-webkit-scrollbar {
+    display: none; 
 }
 
 #tg-acc-list.open {
@@ -221,6 +229,13 @@ body {
 
 #folders-list {
     margin-top: 15px;
+    height: 285px;
+    overflow: scroll;
+    border-radius: 5px;
+}
+
+#folders-list::-webkit-scrollbar {
+    display: none; 
 }
 
 .fl-item {
@@ -291,7 +306,7 @@ body {
 }
 
 #start-button {
-    margin-top: 20px;
+    margin: 20px 0 20px 0;
     width: 120px;
     height: 25px;
     font-weight: 800;

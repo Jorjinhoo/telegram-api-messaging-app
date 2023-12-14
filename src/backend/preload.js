@@ -61,7 +61,7 @@ contextBridge.exposeInMainWorld('electron', {
                   random_id: Math.ceil(Math.random() * 0xffffff) + Math.ceil(Math.random() * 0xffffff),
                 });
 
-                await new Promise(resolve => setTimeout(resolve, delay)); //добаить чтобы клиент мог устаналиать таймер
+                await new Promise(resolve => setTimeout(resolve, delay));
             }else if(!stopSandMessage){
               return 'stop';
             }
