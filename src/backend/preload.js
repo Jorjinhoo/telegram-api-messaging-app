@@ -3,7 +3,6 @@ const fs = require('fs');
 const { API, setApiConfigData } = require('./api');
 const auth = require('./auth');
 const path = require('path');
-const { start } = require('repl');
 
 let stopSandMessage = false;
 
@@ -26,22 +25,26 @@ contextBridge.exposeInMainWorld('electron', {
         );
 
         await setApiConfigData(apiTel);
-        await auth(apiTel, code);
+        const isAuth = await auth(apiTel, code);
 
-        return true;
+        return isAuth;
       } catch(e){
         return e;
       }
     },
     setApiConfig: async (apiTel) => {
-      await setApiConfigData(apiTel);
+      try{
+        await setApiConfigData(apiTel);
+      }catch(e){
+        return e
+      }
     },
     getAccFolders: async () => {
         const api = new API();
         let resolvedPeer = await api.call('messages.getDialogFilters', {});
         return resolvedPeer;
     },
-    sendMessages: async (allAccFolders, selectedFoldersList, messageText, delay) => {
+    sendMessages: async (allAccFolders, selectedFoldersList, messageText, delay, updateSendStatus) => {
       stopSandMessage = !stopSandMessage;
 
       const api = new API();
@@ -51,6 +54,7 @@ contextBridge.exposeInMainWorld('electron', {
         for (const folder of filteredFolders) {
           for (const peer of folder.include_peers){
             if(peer._ == 'inputPeerChannel' && stopSandMessage) {
+              updateSendStatus(folder, peer);
                 await api.call('messages.sendMessage', {
                   peer: {
                     _: peer._,
@@ -67,6 +71,7 @@ contextBridge.exposeInMainWorld('electron', {
             }
           }
         }
+        stopSandMessage = false;
         return 'good';
       }catch (e) {
         console.error('Ошибка при отправке сообщения:', e);

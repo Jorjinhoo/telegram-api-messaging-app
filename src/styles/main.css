@@ -322,6 +322,13 @@ body {
     margin-left: 10px;
 }
 
+#sand-messages-status {
+    background-color: #0086ED;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
 /* message banner */
 .message-banner {
     display: flex;

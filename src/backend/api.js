@@ -2,7 +2,6 @@ const path = require('path');
 const fs = require('fs');
 const MTProto = require('@mtproto/core');
 const { sleep } = require('@mtproto/core/src/utils/common');
-const { message } = require('telegram/client');
 
 let api_id;
 let api_hash;

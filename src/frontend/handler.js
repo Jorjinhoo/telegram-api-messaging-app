@@ -84,6 +84,21 @@ const selectItem = (itemType, itemId) => {
     }
   }
 
+  //send messages status
+  const updateSendStatus = (folder, peer) => {
+    for (let i = 0; i < folder.include_peers.length; i++) {
+      if(folder.include_peers[i].channel_id === peer.channel_id){
+        console.log(`folder: ${folder.title}, peer: ${i + 1}, lenght: ${folder.include_peers.length}`);
+        let isStatus = document.getElementById('sand-messages-status');
+        if(isStatus)isStatus.remove();
+        addItem(
+          'sand-messages-status', 
+          `EXECUTING:   FOLDER: ${folder.title}   CHAT: ${i + 1}/${folder.include_peers.length}`,
+          'send-mess-stat-container'
+          );
+      }
+    }
+  }
 
   //send messages
   let startButtonPressed = false;
@@ -101,7 +116,7 @@ const selectItem = (itemType, itemId) => {
 
     if (allAccFolders.length > 0 && selectedFolders.length > 0 && messageText && delay) {
       delay = delay * 1000;
-      result = await window.electron.sendMessages(allAccFolders, selectedFolders, messageText, delay);
+      result = await window.electron.sendMessages(allAccFolders, selectedFolders, messageText, delay, updateSendStatus);
     } else if(allAccFolders.length < 1){
       console.error('На аккаунте не обнаружено папок!!!');
       addMessageBanner('На аккаунте не обнаружено папок!!!', 'red');
@@ -130,7 +145,7 @@ const selectItem = (itemType, itemId) => {
   }
 
   
-  //login
+  //add account
   let loginButtonPressed = false;
 
   const doLogin = async () => {
@@ -147,10 +162,33 @@ const selectItem = (itemType, itemId) => {
     try{
       if(apiId && apiHash && apiTel){
         const isAuth = await window.electron.userAuth(apiId, apiHash, apiTel, code ? code : '');
+    
+        if(code && isAuth === true){
+          addMessageBanner(`Account: ${apiTel} has been added`, 'green');
+          location.reload(); 
+        }
 
-        if(code)location.reload();
-
-        if(isAuth)addMessageBanner(`Account: ${apiTel} has been added`, 'green');
+        if(isAuth.error_message){
+          switch(isAuth.error_message){
+            case 'PHONE_CODE_INVALID':
+              addMessageBanner('Enter the code and submit the form again');
+              break
+            case 'API_ID_INVALID':
+              addMessageBanner(`INVALID DATA!!!`, 'red');
+              break
+            case 'CONNECTION_API_ID_INVALID':
+              addMessageBanner('TRY AGAIN', 'red');
+              break
+            case 'SESSION_PASSWORD_NEEDED':
+              addMessageBanner('THIS ACCOUNT WITH 2FA AUTHENTICATION!!!', 'red');
+              break
+    
+            default:
+              addMessageBanner(`An error occurred during authorization: ${isAuth}`);
+          }
+        }else{
+          addMessageBanner(`An error occurred during authorization: ${isAuth}`);
+        }
   
       } else if(!apiId){
         console.error('Enter api Id!!!');
@@ -169,12 +207,8 @@ const selectItem = (itemType, itemId) => {
       }, 1000);
 
     }catch(e){
-      if(e.error_message == 'PHONE_CODE_INVALID'){
-        addMessageBanner('Enter the code and submit the form again');
-      }else{
-        addMessageBanner(`An error occurred during authorization: ${e}`);
-      }
-
+      addMessageBanner(`An error occurred during authorization: ${e}`);
+       
       setTimeout(function () {
         removeActiveClass('submit-bttn-spinner', 'loader');
         loginButtonPressed = false;
@@ -197,9 +231,15 @@ const selectItem = (itemType, itemId) => {
 
   //remove account
   const removeAccount = async (accountTel) => {
-    window.electron.removeAccount(accountTel, 'authData/configs', 'config');
-    window.electron.removeAccount(accountTel, 'authData/salt', 'authSalt' );
-    location.reload();
+    try{
+      window.electron.removeAccount(accountTel, 'authData/configs', 'config');
+      window.electron.removeAccount(accountTel, 'authData/salt', 'authSalt' );
+      location.reload();
+      addMessageBanner(`ACCOUNT: ${accountTel} HAS BEEN REMOVED`, 'green');
+    }catch(e){
+      console.log(e);
+      addMessageBanner(`THERE WAS AN ERROR DELETING YOUR ACCOUNT: ${e}`)
+    }
   }
 
   //load accounts
