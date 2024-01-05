@@ -131,15 +131,25 @@ const selectItem = (itemType, itemId) => {
       addMessageBanner('Нужно ввести задержку для отпраки сообщений!!!', 'red');
     }
 
-    setTimeout(function () {
+    setTimeout(async function () {
       removeActiveClass('start-bttn-spinner', 'loader');
       startButtonPressed = false;
       if(result == 'good'){
         addMessageBanner('The messages have been successfully sent', 'green')
       }else if (result == 'stop') {
         addMessageBanner('The process of sending is stopped', 'green')
+      }else if (result.error.error_message && result.error.error_message === 'CHANNEL_PRIVATE' && result.channel_id ){
+        // let channelName = await window.electron.getChannelName(result.channel_id, result.access_hash);
+        addMessageBanner(`An error occurred during sending: 
+                          ${result.error.error_message} 
+                          channelID: 
+                          ${result.channel_id}
+                          Try to recreate current folder or remove private channels`, 
+                          'red');
+      }else if(result.error_message){
+        addMessageBanner(`An error occurred during sending: ${result.error_message}`, 'red');
       }else{
-        addMessageBanner(`An error occurred during authorization: ${result}`, 'red');
+        addMessageBanner(`An error occurred during sending: ${result}`, 'red');
       }
     }, 1000);
   }
@@ -184,7 +194,7 @@ const selectItem = (itemType, itemId) => {
               break
     
             default:
-              addMessageBanner(`An error occurred during authorization: ${isAuth}`);
+              addMessageBanner(`An error occurred during authorization: ${isAuth.error_message}`);
           }
         }else{
           addMessageBanner(`An error occurred during authorization: ${isAuth}`);

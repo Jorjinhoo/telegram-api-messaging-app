@@ -55,6 +55,7 @@ contextBridge.exposeInMainWorld('electron', {
           for (const peer of folder.include_peers){
             if(peer._ == 'inputPeerChannel' && stopSandMessage) {
               updateSendStatus(folder, peer);
+              try{
                 await api.call('messages.sendMessage', {
                   peer: {
                     _: peer._,
@@ -66,6 +67,13 @@ contextBridge.exposeInMainWorld('electron', {
                 });
 
                 await new Promise(resolve => setTimeout(resolve, delay));
+              }catch(e){
+                if(e.error_message === 'CHANNEL_PRIVATE'){
+                  return { error: e, channel_id: peer.channel_id };
+                }else{
+                  return e;
+                }
+              }
             }else if(!stopSandMessage){
               return 'stop';
             }
@@ -74,6 +82,7 @@ contextBridge.exposeInMainWorld('electron', {
         stopSandMessage = false;
         return 'good';
       }catch (e) {
+        stopSandMessage = false;
         console.error('Ошибка при отправке сообщения:', e);
         return e;
       }
@@ -139,5 +148,5 @@ contextBridge.exposeInMainWorld('electron', {
         });
         }
       });
-    }
+    },
 });
